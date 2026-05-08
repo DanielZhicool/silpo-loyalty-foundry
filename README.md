@@ -56,3 +56,61 @@
 
     ```bash
     forge test -vv
+
+# Silpo Loyalty Smart Contract
+
+## Project Description
+This repository contains the smart contract for the "Silpo" loyalty program, developed in Solidity [1]. 
+
+The project implements a system for issuing proprietary reward tokens "Vlasnyi Rakhunok" (ERC-20 standard) for store purchases. Customers can accumulate these tokens and exchange them for discounts using burn mechanics. To receive a discount, a user must burn exactly 100 tokens, which automatically changes their status in the system [1].
+
+## Technology Stack
+* Language: Solidity ^0.8.20
+* Standards: ERC-20, ERC20Burnable [2].
+* Libraries: OpenZeppelin Contracts v5.x [3].
+* Testing Environment: Foundry (Forge Standard Library) [4].
+
+## Core Functionality
+1. **System Token**: The contract issues tokens named `Silpo Vlasnyi Rakhunok` with the symbol `SILPO` [5].
+2. **Role-Based Access (AccessControl)**: 
+   * Instead of a single owner (`Ownable`), the more secure `AccessControl` access management module is used [6].
+   * `DEFAULT_ADMIN_ROLE` has the right to grant and revoke other roles in the system [7].
+   * `MINTER_ROLE` is granted to authorized addresses (e.g., POS servers) that have the exclusive right to mint tokens for customers [5].
+3. **Discount Activation**: The `redeemDiscount()` function checks if the user has at least 100 tokens and if the discount hasn't been activated before. Upon success, the tokens are destroyed (`_burn`), and the `hasDiscount` status becomes `true` [5].
+
+## Security Measures
+The contract is designed with smart contract security best practices in mind [8], [9]:
+* **Reentrancy Protection**: The logic of the `redeemDiscount()` function strictly follows the `Checks-Effects-Interactions` pattern, changing the system state before calling any internal mechanisms for burning tokens [10], [11].
+* **Input Validation**: `require` statements are used to validate the user's balance and prevent double discount activation [12], [13].
+* **Off-chain Monitoring**: Critical state changes emit events (e.g., `DiscountRedeemed`), allowing external services to track activity in real-time [14], [15].
+* **Overflow Protection**: Using Solidity 0.8.20+ guarantees native protection against Integer Overflow/Underflow [16].
+
+## Testing
+The project is covered by automated tests using the Foundry framework [17]. The tested scenarios include:
+* Successful token minting by an authorized minter.
+* Blocking mint access for an administrator without the `MINTER_ROLE` and external users (expecting the custom `AccessControlUnauthorizedAccount` error) [18].
+* Correct burning of 100 tokens and granting the discount.
+* Reverting transactions when attempting to get a discount with an insufficient balance.
+* Protection against double discount application (transaction revert).
+
+## Local Setup Instructions
+To compile and run the tests, you need to have Foundry installed.
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/username/silpo-loyalty.git
+   
+2. Install OpenZeppelin dependencies:
+
+    ```bash
+    forge install openzeppelin/openzeppelin-contracts
+
+3. Compile the project:
+
+    ```bash 
+    forge build
+
+4. Run tests:
+
+    ```bash
+    forge test -vv
