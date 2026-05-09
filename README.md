@@ -35,27 +35,90 @@
 * Захист від повторного застосування знижки (реверт транзакції).
 
 ## Інструкція з локального запуску
-Для компіляції та запуску тестів необхідно мати встановлений Foundry.
 
-1. Клонуйте репозиторій:
-   ```bash
-   git clone <https://github.com/DanielZhicool/silpo-loyalty-foundry>
-   cd silpo-loyalty-foundry
+### Prerequisites
+- **Git** для клонування репозиторію
+- **Foundry** (Forge, Cast, Anvil) для розробки та тестування
+- **macOS/Linux/WSL2** для оптимальної сумісності
 
-2.  Встановіть залежності OpenZeppelin:
+---
 
-    ```bash
-    forge install openzeppelin/openzeppelin-contracts
+### Встановлення та запуск
 
-3. Скомпілюйте проект:
+ 1. Встановіть Foundry (якщо ще не встановлено)
 
-    ```bash 
-    forge build
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+source $HOME/.bashrc  # або ~/.zshrc для macOS
+foundryup
+```
 
-4. Запустіть тестування:
+Перевіріть встановлення:
+```bash
+forge --version
+```
 
-    ```bash
-    forge test -vv
+ 2. Клонуйте репозиторій
+
+```bash
+git clone https://github.com/DanielZhicool/silpo-loyalty-foundry.git
+cd silpo-loyalty-foundry
+```
+
+ 3. Встановіть залежності
+
+Все необхідне вже встановлено, але при потребі переінсталяції:
+
+```bash
+forge install openzeppelin/openzeppelin-contracts
+```
+
+ 4. Скомпілюйте проект
+
+```bash
+forge build
+```
+
+Очікуваний вихід:
+```
+Compiling 1 files with Solidity 0.8.20
+Solc 0.8.20 finished in 2.50s
+Compiler run successful!
+```
+
+ 5. Запустіть тести
+
+```bash
+# Запуск усіх тестів з деталізацією
+forge test -vv
+
+# Запуск конкретного тесту
+forge test --match testMintSuccess -vv
+
+# Запуск з газовим звітом
+forge test --gas-report
+```
+
+---
+
+### Структура проекту
+
+```
+silpo-loyalty-foundry/
+├── src/
+│   └── SilpoLoyalty.sol          # Основний смарт-контракт
+├── test/
+│   └── SilpoLoyalty.t.sol        # Тести контракту
+├── lib/
+│   ├── forge-std/                # Стандартна бібліотека Foundry
+│   └── openzeppelin-contracts/   # Контракти OpenZeppelin
+├── foundry.toml                  # Конфігурація Foundry
+├── remappings.txt                # Маршрутизація імпортів
+└── README.md                     # Цей файл
+```
+
+---
+
 
 # Silpo Loyalty Smart Contract
 
@@ -94,23 +157,80 @@ The project is covered by automated tests using the Foundry framework. The teste
 * Protection against double discount application (transaction revert).
 
 ## Local Setup Instructions
-To compile and run the tests, you need to have Foundry installed.
+### Prerequisites
+- **Git** 
+- **Foundry** (Forge, Cast, Anvil) for testing
+- **macOS/Linux/WSL2** for best compatibility
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/username/silpo-loyalty.git
-   
-2. Install OpenZeppelin dependencies:
+---
 
-    ```bash
-    forge install openzeppelin/openzeppelin-contracts
+### Installation and running tests
 
-3. Compile the project:
+ 1. Install foundry
 
-    ```bash 
-    forge build
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+source $HOME/.bashrc  # or ~/.zshrc for macOS
+foundryup
+```
 
-4. Run tests:
+Check installation:
+```bash
+forge --version
+```
 
-    ```bash
-    forge test -vv
+ 2. Clone repository
+
+```bash
+git clone https://github.com/DanielZhicool/silpo-loyalty-foundry.git
+cd silpo-loyalty-foundry
+```
+
+ 3. Install dependencies 
+
+```bash
+forge install openzeppelin/openzeppelin-contracts
+```
+
+ 4. Compile project
+
+```bash
+forge build
+```
+
+Expected output:
+```
+Compiling 1 files with Solidity 0.8.20
+Solc 0.8.20 finished in 2.50s
+Compiler run successful!
+```
+
+ 5. Run tests
+
+```bash
+# Run all tests
+forge test -vv
+
+# Run specific test
+forge test --match testMintSuccess -vv
+
+# Run with gas report
+forge test --gas-report
+```
+
+---
+
+### Project struture
+
+```
+silpo-loyalty-foundry/
+├── src/
+│   └── SilpoLoyalty.sol          # Main smart-contract
+├── test/
+│   └── SilpoLoyalty.t.sol        # Tests
+├── lib/
+│   ├── forge-std/                # standart Foundry library
+│   └── openzeppelin-contracts/   # OpenZeppelin contracts
+├── foundry.toml                  # Foundry configuration
+├── remappings.txt                # import remapping
+└── README.md                     # this file
